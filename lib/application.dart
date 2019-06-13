@@ -14,8 +14,7 @@ class Application {
   static String Token = '';
   static UserEntity User;
   static final String ClientId = 'd6c6987a-a73d-4309-8d74-d6027d9732b5';
-  static final String ClientSecret =
-      'TqtsJT13U6m2u3v7QEHQXWRlx8XdZ8tGxv81VCQ-XxTY3nVXYBKHSXPthveAaGm95eNVMPS91XJRLBT4';
+  static final String ClientSecret = 'TqtsJT13U6m2u3v7QEHQXWRlx8XdZ8tGxv81VCQ-XxTY3nVXYBKHSXPthveAaGm95eNVMPS91XJRLBT4';
   static final Dio SystemDio = new Dio();
   static final Dio UserDio = new Dio();
 

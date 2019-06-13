@@ -9,12 +9,10 @@ class NewsInfoPage extends StatefulWidget {
   final NewsEntity info;
   NewsInfoPage(this.info);
   @override
-  NewsInfoPageState createState() => new NewsInfoPageState(info);
+  NewsInfoPageState createState() => new NewsInfoPageState();
 }
 
 class NewsInfoPageState extends State<NewsInfoPage> {
-  final NewsEntity info;
-  NewsInfoPageState(this.info);
   String content = '';
 
   @override
@@ -29,15 +27,15 @@ class NewsInfoPageState extends State<NewsInfoPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              info.Title,
+              widget.info.Title,
               style: TextStyle(fontSize: 18, color: Colors.blue),
             ),
             Row(
               children: [
                 Expanded(
-                  child: Text('${info.ViewCount} 阅读 ${info.CommentCount} 评论'),
+                  child: Text('${widget.info.ViewCount} 阅读 ${widget.info.CommentCount} 评论'),
                 ),
-                Text(Application.getTime(info.DateAdded)),
+                Text(Application.getTime(widget.info.DateAdded)),
               ],
             ),
             Container(
@@ -78,7 +76,7 @@ class NewsInfoPageState extends State<NewsInfoPage> {
   void _getInfo() async {
     try {
       Response response = await Application.SystemDio.get(
-          "https://api.cnblogs.com/api/newsitems/${info.Id}/body");
+          "https://api.cnblogs.com/api/newsitems/${widget.info.Id}/body");
       if (response == null || response.statusCode != 200) return;
 //      print('第${_default_page_index}页数据：' + response.data.toString());
 //      List<BlogEntity> data = List.generate(response.data.length, (index) {

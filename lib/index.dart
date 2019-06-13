@@ -11,6 +11,7 @@ import 'package:flutter_easyrefresh/bezier_bounce_footer.dart';
 import 'blog_info.dart';
 import 'entity/news.dart';
 import 'news_info.dart';
+import 'login.dart';
 
 class IndexPage extends StatefulWidget {
   IndexPage() {
@@ -67,32 +68,72 @@ class IndexPageState extends State<IndexPage> {
             ],
           ),
         ),
-//        drawer: Container(
-//          padding: EdgeInsets.fromLTRB(10, 50, 10, 10),
-//          child: Column(
-//            children: <Widget>[
-//              FlatButton(
-//                  onPressed: () {},
-//                  child: Column(
-//                    children: <Widget>[
-//                      Image.network(
-//                        Application.User == null
-//                            ? 'http://hbimg.b0.upaiyun.com/79e75e5d00341d770a89d081d2f11617e2be3577eda-VrL3fb_fw658'
-//                            : Application.User.Avatar,
-//                        width: 50,
-//                        height: 50,
-//                      ),
-//                      Text(
-//                        Application.User == null
-//                            ? '未登录'
-//                            : Application.User.DisplayName,
-//                        style: TextStyle(color: Colors.white),
-//                      ),
-//                    ],
-//                  )),
-//            ],
-//          ),
-//        ),
+        drawer: Container(
+          alignment: Alignment.topLeft,
+          color: Colors.white,
+          width: MediaQuery.of(context).size.width * 0.7,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.lightBlueAccent,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    FlatButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(new MaterialPageRoute(builder: (_) {
+                            return new LoginPage();
+                          }));
+                        },
+                        padding: EdgeInsets.only(bottom: 15),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ClipOval(
+                              child: Image.network(
+                                Application.User == null
+                                    ? 'http://hbimg.b0.upaiyun.com/79e75e5d00341d770a89d081d2f11617e2be3577eda-VrL3fb_fw658'
+                                    : Application.User.Avatar,
+                                width: 80,
+                                height: 80,
+                              ),
+                            ),
+                            Text(
+                              Application.User == null
+                                  ? '未登录'
+                                  : Application.User.DisplayName,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        )),
+                    Flexible(
+                      child:Container()
+                    ),
+                    Offstage(
+                      offstage: Application.User == null ? true : false,
+                      child: FlatButton(
+                        onPressed: () {
+                          //Todo 点击注销事件
+                        },
+                        child: Text('注销',style: TextStyle(color:Colors.white),),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(),
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: Text('设置'),
+              ),
+              Divider(),
+            ],
+          ),
+        ),
         body: TabBarView(
           children: [
             _buildDefaultArticlesWidget(),

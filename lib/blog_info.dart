@@ -10,12 +10,10 @@ class BlogInfoPage extends StatefulWidget {
   final BlogEntity info;
   BlogInfoPage(this.info);
   @override
-  BlogInfoPageState createState() => new BlogInfoPageState(info);
+  BlogInfoPageState createState() => new BlogInfoPageState();
 }
 
 class BlogInfoPageState extends State<BlogInfoPage> {
-  final BlogEntity info;
-  BlogInfoPageState(this.info);
   String content = '';
 
   @override
@@ -30,13 +28,13 @@ class BlogInfoPageState extends State<BlogInfoPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              info.Title,
+              widget.info.Title,
               style: TextStyle(fontSize: 18, color: Colors.blue),
             ),
             Row(
               children: <Widget>[
                 Image.network(
-                  info.Avatar,
+                  widget.info.Avatar,
                   width: 30,
                   height: 30,
                 ),
@@ -45,14 +43,14 @@ class BlogInfoPageState extends State<BlogInfoPage> {
                 ),
                 Expanded(
                   child: Text(
-                    info.Author,
+                    widget.info.Author,
                     style: TextStyle(
                       fontSize: 15,
                     ),
                   ),
                 ),
                 Text(
-                  Application.getTime(info.PostDate),
+                  Application.getTime(widget.info.PostDate),
                   style: TextStyle(
                     fontSize: 15,
                   ),
@@ -106,7 +104,7 @@ class BlogInfoPageState extends State<BlogInfoPage> {
   void _getBlogInfo() async {
     try {
       Response response = await Application.SystemDio
-          .get("https://api.cnblogs.com/api/blogposts/${info.Id}/body");
+          .get("https://api.cnblogs.com/api/blogposts/${widget.info.Id}/body");
       if (response == null || response.statusCode != 200) return;
 //      print('第${_default_page_index}页数据：' + response.data.toString());
 //      List<BlogEntity> data = List.generate(response.data.length, (index) {
