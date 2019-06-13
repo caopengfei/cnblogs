@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'entity/blog.dart';
 import 'application.dart';
 import 'dart:async';
-import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/bezier_circle_header.dart';
@@ -14,14 +13,14 @@ import 'news_info.dart';
 import 'login.dart';
 
 class IndexPage extends StatefulWidget {
-  IndexPage() {
+  IndexPage(){
     Application.init();
   }
   @override
   IndexPageState createState() => new IndexPageState();
 }
 
-class IndexPageState extends State<IndexPage> {
+class IndexPageState extends State<IndexPage> with SingleTickerProviderStateMixin{
   GlobalKey<EasyRefreshState> _defaultEasyRefreshKey =
       new GlobalKey<EasyRefreshState>();
   GlobalKey<RefreshHeaderState> _defaultHeaderKey =
@@ -40,6 +39,8 @@ class IndexPageState extends State<IndexPage> {
       new GlobalKey<RefreshHeaderState>();
   GlobalKey<RefreshFooterState> _newsFooterKey =
       new GlobalKey<RefreshFooterState>();
+  TabController _tabController;
+  PageController _pageController;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +53,10 @@ class IndexPageState extends State<IndexPage> {
 //            IconButton(icon: Icon(Icons.search), onPressed: () {}),
 //          ],
           bottom: TabBar(
+            controller: _tabController,
+            onTap: (index){
+              _pageController.jumpToPage(index);
+            },
             labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             unselectedLabelStyle:
                 TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
@@ -134,7 +139,15 @@ class IndexPageState extends State<IndexPage> {
             ],
           ),
         ),
-        body: TabBarView(
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: (index) {
+            if(index==0 && _liDefault.length==0) _getDefaultArticlesHttp();
+            if(index==1 && _liEssence.length==0) _getEssenceArticlesHttp();
+            if(index==2 && _liNews.length==0) _getNewsArticlesHttp();
+            //标签进行相应的改变
+            _tabController.animateTo(index);
+          },
           children: [
             _buildDefaultArticlesWidget(),
 //            Text('首页'),
@@ -476,14 +489,20 @@ class IndexPageState extends State<IndexPage> {
   @override
   void initState() {
     super.initState();
-    _getDefaultArticlesHttp();
-    _getEssenceArticlesHttp();
-    _getNewsArticlesHttp();
+    _tabController = new TabController(length: 3, vsync: this);
+    _pageController = new PageController(keepPage: true);
+    Application.bindToken().then((cd){
+      _getDefaultArticlesHttp();
+//      _getEssenceArticlesHttp();
+//      _getNewsArticlesHttp();
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
+    _tabController.dispose();
+    _pageController.dispose();
   }
 
   @override
